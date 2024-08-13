@@ -1,1 +1,2 @@
 add_subdirectory(sequencegenerator)
+add_subdirectory(tsequencegenerator)
