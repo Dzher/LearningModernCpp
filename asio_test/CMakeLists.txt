@@ -48,3 +48,15 @@ else()
     target_link_libraries(tcp_server_sync PRIVATE Threads::Threads)
 endif()
 #========================================================================= 
+set(tcp_async
+    tcp_async.cpp
+)
+
+add_executable(tcp_async ${tcp_async})
+if(WIN32)
+    target_link_libraries(tcp_async PRIVATE ws2_32 mswsock)
+else()
+    find_package(Threads REQUIRED)
+    target_link_libraries(tcp_async PRIVATE Threads::Threads)
+endif()
+#========================================================================= 

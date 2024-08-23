@@ -1,8 +1,9 @@
 #include <ctime>
 #include <iostream>
-#include "asio.hpp"
 #include "asio/detail/chrono.hpp"
+#include "asio/ip/tcp.hpp"
 #include "asio/steady_timer.hpp"
+#include "asio/write.hpp"
 
 std::string getDaytime()
 {

@@ -1,5 +1,6 @@
 #include <iostream>
-#include "asio.hpp"
+#include "asio/connect.hpp"
+#include "asio/ip/tcp.hpp"
 
 int main(int argc, char* argv[])
 {
