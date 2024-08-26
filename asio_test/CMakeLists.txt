@@ -84,3 +84,15 @@ else()
     target_link_libraries(udp_server_sync PRIVATE Threads::Threads)
 endif()
 #========================================================================= 
+set(udp_async
+    udp_async.cpp
+)
+
+add_executable(udp_async ${udp_async})
+if(WIN32)
+    target_link_libraries(udp_async PRIVATE ws2_32 mswsock)
+else()
+    find_package(Threads REQUIRED)
+    target_link_libraries(udp_async PRIVATE Threads::Threads)
+endif()
+#========================================================================= 
