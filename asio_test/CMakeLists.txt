@@ -48,16 +48,16 @@ else()
     target_link_libraries(tcp_server_sync PRIVATE Threads::Threads)
 endif()
 #========================================================================= 
-set(tcp_async
-    tcp_async.cpp
+set(tcp_server_async
+    tcp_server_async.cpp
 )
 
-add_executable(tcp_async ${tcp_async})
+add_executable(tcp_server_async ${tcp_server_async})
 if(WIN32)
-    target_link_libraries(tcp_async PRIVATE ws2_32 mswsock)
+    target_link_libraries(tcp_server_async PRIVATE ws2_32 mswsock)
 else()
     find_package(Threads REQUIRED)
-    target_link_libraries(tcp_async PRIVATE Threads::Threads)
+    target_link_libraries(tcp_server_async PRIVATE Threads::Threads)
 endif()
 #========================================================================= 
 set(udp_client_sync
@@ -84,15 +84,27 @@ else()
     target_link_libraries(udp_server_sync PRIVATE Threads::Threads)
 endif()
 #========================================================================= 
-set(udp_async
-    udp_async.cpp
+set(udp_server_async
+    udp_server_async.cpp
 )
 
-add_executable(udp_async ${udp_async})
+add_executable(udp_server_async ${udp_server_async})
 if(WIN32)
-    target_link_libraries(udp_async PRIVATE ws2_32 mswsock)
+    target_link_libraries(udp_server_async PRIVATE ws2_32 mswsock)
 else()
     find_package(Threads REQUIRED)
-    target_link_libraries(udp_async PRIVATE Threads::Threads)
+    target_link_libraries(udp_server_async PRIVATE Threads::Threads)
 endif()
 #========================================================================= 
+set(tcp_udp_server_async
+    tcp_udp_server_async.cpp
+)
+
+add_executable(tcp_udp_server_async ${tcp_udp_server_async})
+if(WIN32)
+    target_link_libraries(tcp_udp_server_async PRIVATE ws2_32 mswsock)
+else()
+    find_package(Threads REQUIRED)
+    target_link_libraries(tcp_udp_server_async PRIVATE Threads::Threads)
+endif()
+#=========================================================================
