@@ -108,3 +108,29 @@ else()
     target_link_libraries(tcp_udp_server_async PRIVATE Threads::Threads)
 endif()
 #=========================================================================
+set(chat_client
+    chat_client.cpp
+    chat_message.hpp
+)
+
+add_executable(chat_client ${chat_client})
+if(WIN32)
+    target_link_libraries(chat_client PRIVATE ws2_32 mswsock)
+else()
+    find_package(Threads REQUIRED)
+    target_link_libraries(chat_client PRIVATE Threads::Threads)
+endif()
+#=========================================================================
+set(chat_server
+    chat_server.cpp
+    chat_message.hpp
+)
+
+add_executable(chat_server ${chat_server})
+if(WIN32)
+    target_link_libraries(chat_server PRIVATE ws2_32 mswsock)
+else()
+    find_package(Threads REQUIRED)
+    target_link_libraries(chat_server PRIVATE Threads::Threads)
+endif()
+#=========================================================================
