@@ -21,6 +21,11 @@ public:
         return kHeaderLength + body_length_;
     }
 
+    static unsigned int headerLength()
+    {
+        return kHeaderLength;
+    }
+
     char* body()
     {
         return data_ + kHeaderLength;
@@ -29,6 +34,11 @@ public:
     unsigned int bodyLength()
     {
         return body_length_;
+    }
+
+    static unsigned int bodyMaxLength()
+    {
+        return kMaxBodyLength;
     }
 
     void updateBodyLength(unsigned int length)
