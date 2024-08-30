@@ -1,6 +1,3 @@
-
-
-#include <winsock2.h>
 #include <cstring>
 #include <deque>
 #include <exception>
@@ -17,8 +14,6 @@
 
 class ChatClient
 {
-    using ChatMsgQueue = std::deque<ChatMessage>;
-
 public:
     ChatClient(asio::io_context& io_context, const asio::ip::tcp::resolver::results_type& endpoints)
         : io_context_(io_context), socket_(io_context_)
@@ -26,13 +21,13 @@ public:
         connect(endpoints);
     }
 
-    void write(const ChatMessage& msgs)
+    void write(const ChatMessage& msg)
     {
         asio::post(io_context_,
-                   [this, msgs]()
+                   [this, msg]()
                    {
                        bool write_in_progress = !write_messages_.empty();
-                       write_messages_.push_back(msgs);
+                       write_messages_.push_back(msg);
                        if (!write_in_progress)
                        {
                            write();

@@ -4,6 +4,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <deque>
+
 class ChatMessage
 {
 public:
@@ -72,5 +74,7 @@ private:
     char data_[kHeaderLength + kMaxBodyLength];
     unsigned int body_length_;
 };
+
+using ChatMsgQueue = std::deque<ChatMessage>;
 
 #endif
