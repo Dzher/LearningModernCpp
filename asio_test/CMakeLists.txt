@@ -134,3 +134,27 @@ else()
     target_link_libraries(chat_server PRIVATE Threads::Threads)
 endif()
 #=========================================================================
+set(tcp_echo_server
+    echo/tcp_echo_server.cpp
+)
+
+add_executable(tcp_echo_server ${tcp_echo_server})
+if(WIN32)
+    target_link_libraries(tcp_echo_server PRIVATE ws2_32 mswsock)
+else()
+    find_package(Threads REQUIRED)
+    target_link_libraries(tcp_echo_server PRIVATE Threads::Threads)
+endif()
+#=========================================================================
+set(tcp_echo_client
+    echo/tcp_echo_client.cpp
+)
+
+add_executable(tcp_echo_client ${tcp_echo_client})
+if(WIN32)
+    target_link_libraries(tcp_echo_client PRIVATE ws2_32 mswsock)
+else()
+    find_package(Threads REQUIRED)
+    target_link_libraries(tcp_echo_client PRIVATE Threads::Threads)
+endif()
+#=========================================================================
