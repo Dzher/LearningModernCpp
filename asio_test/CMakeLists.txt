@@ -1,19 +1,19 @@
 #========================================================================= 
 set(timer_sync
-    timer_sync.cpp
+    timer/timer_sync.cpp
 )
 
 add_executable(timer_sync ${timer_sync})
 if(WIN32)
-target_link_libraries(timer_sync PRIVATE ws2_32 mswsock)
+    target_link_libraries(timer_sync PRIVATE ws2_32 mswsock)
 else()
-find_package(Threads REQUIRED)
-target_link_libraries(timer_sync PRIVATE Threads::Threads)
+    find_package(Threads REQUIRED)
+    target_link_libraries(timer_sync PRIVATE Threads::Threads)
 endif()
 
 #========================================================================= 
 set(timer_async
-    timer_async.cpp
+    timer/timer_async.cpp
 )
 
 add_executable(timer_async ${timer_async})
@@ -25,7 +25,7 @@ else()
 endif()
 #========================================================================= 
 set(tcp_client_sync
-tcp_client_sync.cpp
+    tcp/tcp_client_sync.cpp
 )
 
 add_executable(tcp_client_sync ${tcp_client_sync})
@@ -37,7 +37,7 @@ else()
 endif()
 #========================================================================= 
 set(tcp_server_sync
-    tcp_server_sync.cpp
+    tcp/tcp_server_sync.cpp
 )
 
 add_executable(tcp_server_sync ${tcp_server_sync})
@@ -49,7 +49,7 @@ else()
 endif()
 #========================================================================= 
 set(tcp_server_async
-    tcp_server_async.cpp
+    tcp/tcp_server_async.cpp
 )
 
 add_executable(tcp_server_async ${tcp_server_async})
@@ -61,7 +61,7 @@ else()
 endif()
 #========================================================================= 
 set(udp_client_sync
-    udp_client_sync.cpp
+    udp/udp_client_sync.cpp
 )
 
 add_executable(udp_client_sync ${udp_client_sync})
@@ -73,7 +73,7 @@ else()
 endif()
 #========================================================================= 
 set(udp_server_sync
-    udp_server_sync.cpp
+    udp/udp_server_sync.cpp
 )
 
 add_executable(udp_server_sync ${udp_server_sync})
@@ -85,7 +85,7 @@ else()
 endif()
 #========================================================================= 
 set(udp_server_async
-    udp_server_async.cpp
+    udp/udp_server_async.cpp
 )
 
 add_executable(udp_server_async ${udp_server_async})
@@ -109,8 +109,8 @@ else()
 endif()
 #=========================================================================
 set(chat_client
-    chat_client.cpp
-    chat_message.hpp
+    chat/chat_client.cpp
+    chat/chat_message.hpp
 )
 
 add_executable(chat_client ${chat_client})
@@ -122,8 +122,8 @@ else()
 endif()
 #=========================================================================
 set(chat_server
-    chat_server.cpp
-    chat_message.hpp
+    chat/chat_server.cpp
+    chat/chat_message.hpp
 )
 
 add_executable(chat_server ${chat_server})
