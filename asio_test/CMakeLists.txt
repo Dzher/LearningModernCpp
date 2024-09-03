@@ -158,3 +158,27 @@ else()
     target_link_libraries(tcp_echo_client PRIVATE Threads::Threads)
 endif()
 #=========================================================================
+set(udp_echo_server
+    echo/udp_echo_server.cpp
+)
+
+add_executable(udp_echo_server ${udp_echo_server})
+if(WIN32)
+    target_link_libraries(udp_echo_server PRIVATE ws2_32 mswsock)
+else()
+    find_package(Threads REQUIRED)
+    target_link_libraries(udp_echo_server PRIVATE Threads::Threads)
+endif()
+#=========================================================================
+set(udp_echo_client
+    echo/udp_echo_client.cpp
+)
+
+add_executable(udp_echo_client ${udp_echo_client})
+if(WIN32)
+    target_link_libraries(udp_echo_client PRIVATE ws2_32 mswsock)
+else()
+    find_package(Threads REQUIRED)
+    target_link_libraries(udp_echo_client PRIVATE Threads::Threads)
+endif()
+#=========================================================================
