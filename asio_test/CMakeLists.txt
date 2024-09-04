@@ -182,3 +182,15 @@ else()
     target_link_libraries(udp_echo_client PRIVATE Threads::Threads)
 endif()
 #=========================================================================
+set(http_sync_client
+    http/http_sync_client.cpp
+)
+
+add_executable(http_sync_client ${http_sync_client})
+if(WIN32)
+    target_link_libraries(http_sync_client PRIVATE ws2_32 mswsock)
+else()
+    find_package(Threads REQUIRED)
+    target_link_libraries(http_sync_client PRIVATE Threads::Threads)
+endif()
+#=========================================================================
