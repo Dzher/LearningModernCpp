@@ -18,14 +18,14 @@ void server(asio::io_context& io_context, unsigned short port)
 
 int main(int argc, char* argv[])
 {
+    if (argc != 2)
+    {
+        std::cerr << "Usage: blocking_udp_echo_server <port>" << std::endl;
+        return 1;
+    }
+
     try
     {
-        if (argc != 2)
-        {
-            std::cerr << "Usage: blocking_udp_echo_server <port>" << std::endl;
-            return 1;
-        }
-
         asio::io_context io_context;
         server(io_context, std::atoi(argv[1]));
     }

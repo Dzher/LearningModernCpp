@@ -19,13 +19,13 @@ int main(int argc, const char* argv[])
         asio::io_context io_context;
         asio::ip::udp::resolver resolver{io_context};
         auto endpoint = resolver.resolve(asio::ip::udp::v4(), argv[1], argv[2])->endpoint();
-        asio::ip::udp::socket socket{io_context};
-        socket.open(asio::ip::udp::v4());
 
         std::cout << "Enter Message: " << std::endl;
         char send_message[max_length];
         std::cin.getline(send_message, max_length);
         size_t send_len = std::strlen(send_message);
+        asio::ip::udp::socket socket{io_context};
+        socket.open(asio::ip::udp::v4());
         socket.send_to(asio::buffer(send_message, send_len), endpoint);
 
         char reveive_message[max_length];
