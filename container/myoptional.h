@@ -1,159 +1,233 @@
 #include <exception>
+#include <memory>
+#include <type_traits>
+#include <utility>
 
-struct my_bad_optional_access : public std::exception
+struct __my_bad_optional_access : public std::exception
 {
-    my_bad_optional_access() = default;
-    virtual ~my_bad_optional_access() = default;
+    __my_bad_optional_access() = default;
+    virtual ~__my_bad_optional_access() = default;
 
     const char* what() const noexcept override {
         return "bad myoptional access!";
     }
 };
 
-struct my_nullopt_t
+struct __my_nullopt_t
 {
-    explicit my_nullopt_t() = default;
+    explicit __my_nullopt_t() = default;
 };
 
-template <typename T>
-struct myoptional
+template <typename _Tp>
+struct myOptional
 {
-    bool m_has_value;
+    bool __m_has_value;
     // union default will not construct it's member
     union
     {
-        T m_value;
-        // my_nullopt_t m_my_nullopt_t;
+        _Tp __m_value;
+        __my_nullopt_t __m_my_nullopt_t;
     };
 
-    myoptional(const T& value) : m_has_value(true), m_value(value) {
+    myOptional(const _Tp& value) : __m_has_value(true), __m_value(value) {
     }
 
-    myoptional()
-        : m_has_value(false)
-    // ,m_my_nullopt_t()
-    {
+    myOptional() : __m_has_value(false), __m_my_nullopt_t() {
     }
 
-    myoptional(my_nullopt_t)
-        : m_has_value(false)
-    // ,m_my_nullopt_t()
-    {
+    myOptional(__my_nullopt_t) : __m_has_value(false), __m_my_nullopt_t() {
     }
 
-    myoptional(const myoptional& that) : m_has_value(that.m_has_value) {
-        if (m_has_value) {
-            // !error: m_value = T(that.m_value); // use myoptional.operator=(const T&)
-            new (&m_value) T(that.m_value);  // placement new
+    myOptional(const myOptional& __that) : __m_has_value(__that.__m_has_value) {
+        if (__m_has_value) {
+            // !error: m_value = T(__that.m_value); // use myoptional.operator=(const T&)
+            new (&__m_value) _Tp(__that.m_value);  // placement new
         }
     }
 
-    myoptional(myoptional&& that) : m_has_value(that.m_has_value) {
-        if (m_has_value) {
-            new (&m_value) T(std::move(that.m_value));  // placement new
+    myOptional(myOptional&& __that) : __m_has_value(__that.__m_has_value) {
+        if (__m_has_value) {
+            new (&__m_value) _Tp(std::move(__that.m_value));  // placement new
         }
     }
 
-    myoptional& operator=(my_nullopt_t) {
-        if (m_has_value) {
-            m_value.~T();
-            m_has_value = false;
+    myOptional& operator=(__my_nullopt_t) {
+        if (__m_has_value) {
+            __m_value.~_Tp();
+            __m_has_value = false;
         }
 
         return *this;
     }
 
-    myoptional& operator=(T value) {
-        if (m_has_value) {
-            m_value.~T();
-            m_has_value = false;
+    myOptional& operator=(_Tp __value) {
+        if (__m_has_value) {
+            __m_value.~_Tp();
+            __m_has_value = false;
         }
 
-        new (&m_value) T(std::move(value));
-        m_has_value = true;
+        new (&__m_value) _Tp(std::move(__value));
+        __m_has_value = true;
 
         return *this;
     }
 
-    myoptional& operator=(const myoptional& that) {
-        if (m_has_value) {
-            m_value.~T();
-            m_has_value = false;
+    myOptional& operator=(const myOptional& __that) {
+        if (this == __that) {
+            return *this;
         }
 
-        if (that.m_has_value) {
-            new (&m_value) T(that.m_value);
+        if (__m_has_value) {
+            __m_value.~_Tp();
+            __m_has_value = false;
         }
-        m_has_value = that.m_has_value;
+
+        if (__that.__m_has_value) {
+            new (&__m_value) _Tp(__that.m_value);
+        }
+        __m_has_value = __that.__m_has_value;
 
         return *this;
     }
 
-    myoptional& operator=(myoptional&& that) {
-        if (m_has_value) {
-            m_value.~T();
-            m_has_value = false;
+    myOptional& operator=(myOptional&& __that) {
+        if (__m_has_value) {
+            __m_value.~_Tp();
+            __m_has_value = false;
         }
 
-        if (that.m_has_value) {
-            new (&m_value) T(std::move(that.m_value));
-            that.m_value.~T();
+        if (__that.__m_has_value) {
+            new (&__m_value) _Tp(std::move(__that.m_value));
+            __that.m_value.~_Tp();
         }
-        m_has_value = that.m_has_value;
-        that.m_has_value = false;
+        __m_has_value = __that.__m_has_value;
+        __that.__m_has_value = false;
 
         return *this;
     }
 
-    ~myoptional() {
-        if (m_has_value) {
-            m_value.~T();
+    ~myOptional() noexcept {
+        if (__m_has_value) {
+            __m_value.~_Tp();
         }
     }
 
     bool has_value() const {
-        return m_has_value;
+        return __m_has_value;
     }
 
-    T& value() & {
-        if (m_has_value) {
-            return m_value;
+    explicit operator bool() const noexcept {
+        return __m_has_value;
+    }
+
+    _Tp& value() & {
+        if (__m_has_value) {
+            return __m_value;
         }
-        throw my_bad_optional_access();
+        throw __my_bad_optional_access();
     }
 
-    T const& value() const& {
-        if (m_has_value) {
-            return m_value;
+    _Tp const& value() const& {
+        if (__m_has_value) {
+            return __m_value;
         }
-        throw my_bad_optional_access();
+        throw __my_bad_optional_access();
     }
 
-    T&& value() && {
-        if (m_has_value) {
-            return std::move(m_value);
+    _Tp&& value() && {
+        if (__m_has_value) {
+            return std::move(__m_value);
         }
-        throw my_bad_optional_access();
+        throw __my_bad_optional_access();
     }
 
-    T const&& value() const&& {
-        if (m_has_value) {
-            return std::move(m_value);
+    _Tp const&& value() const&& {
+        if (__m_has_value) {
+            return std::move(__m_value);
         }
-        throw my_bad_optional_access();
+        throw __my_bad_optional_access();
     }
 
-    T value_or(T default_value) const& {
-        if (m_has_value) {
-            return m_value;
+    _Tp& operator*() & noexcept {
+        return __m_value;
+    }
+
+    _Tp const& operator*() const& noexcept {
+        return __m_value;
+    }
+
+    _Tp&& operator*() && noexcept {
+        return std::move(__m_value);
+    }
+
+    _Tp const&& operator*() const&& noexcept {
+        return std::move(__m_value);
+    }
+
+    _Tp* operator->() noexcept {
+        // return &m_value;
+        return std::addressof(__m_value);
+    }
+
+    _Tp const* operator->() const noexcept {
+        // return &m_value;
+        return std::addressof(__m_value);
+    }
+
+    _Tp value_or(_Tp default_value) const& {
+        if (__m_has_value) {
+            return __m_value;
         }
         return default_value;
     }
 
-    T value_or(T default_value) const&& {
-        if (m_has_value) {
-            return std::move(m_value);
+    _Tp value_or(_Tp default_value) const&& {
+        if (__m_has_value) {
+            return std::move(__m_value);
         }
         return std::move(default_value);
+    }
+
+    template <typename... _Ts>
+    void emplace(_Ts&&... __ts) {
+        if (__m_has_value) {
+            __m_value.~_Tp();
+            __m_has_value = false;
+        }
+        new (&__m_value) _Tp(std::forward<_Ts>(__ts)...);
+        __m_has_value = true;
+    }
+
+    void reset() {
+        if (__m_has_value) {
+            __m_value.~_Tp();
+            __m_has_value = false;
+        }
+    }
+
+    template <typename _Func>
+    auto and_then(_Func&& __f) {
+        using _RetType = std::remove_cv_t<std::remove_reference_t<decltype(__f(__m_value))>>;
+        if (__m_has_value) {
+            return std::forward<_Func>(__f)(__m_value);
+        }
+        return _RetType{};
+    }
+
+    template <typename _Func>
+    // avoid undefined variable '__f'
+    auto transform(_Func&& __f) -> myOptional<std::remove_cv_t<std::remove_reference_t<decltype(__f(__m_value))>>> {
+        if (__m_has_value) {
+            return std::forward<_Func>(__f)(__m_value);
+        }
+        return __m_my_nullopt_t;
+    }
+
+    template <typename _F>
+    myOptional or_else(_F&& __f) {
+        if (__m_has_value) {
+            return *this;
+        }
+        return std::forward<_F>(__f)();
     }
 };
