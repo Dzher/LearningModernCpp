@@ -64,7 +64,7 @@ struct myArray
         return _M_element;
     }
 
-    _Tp* const cdata() const noexcept {
+    _Tp* cdata() const noexcept {
         return _M_element;
     }
 
@@ -92,11 +92,11 @@ struct myArray
         return _M_element + _N;
     }
 
-    _Tp* const cbegin() const noexcept {
+    _Tp* cbegin() const noexcept {
         return std::as_const(begin());
     }
 
-    _Tp* const cend() const noexcept {
+    _Tp* cend() const noexcept {
         return std::as_const(end());
     }
 
@@ -108,11 +108,11 @@ struct myArray
         return std::make_reverse_iterator(end());
     }
 
-    _Tp* const crbegin() const noexcept {
+    _Tp* crbegin() const noexcept {
         return std::make_reverse_iterator(cbegin());
     }
 
-    _Tp* const crend() const noexcept {
+    _Tp* crend() const noexcept {
         return std::make_reverse_iterator(cend());
     }
 };
@@ -161,11 +161,11 @@ struct myArray<_Tp, 0>
         return nullptr;
     }
 
-    _Tp* const cbegin() const noexcept {
+    _Tp* cbegin() const noexcept {
         return nullptr;
     }
 
-    _Tp* const cend() const noexcept {
+    _Tp* cend() const noexcept {
         return nullptr;
     }
 
@@ -185,11 +185,11 @@ struct myArray<_Tp, 0>
         return nullptr;
     }
 
-    _Tp* const crbegin() const noexcept {
+    _Tp* crbegin() const noexcept {
         return nullptr;
     }
 
-    _Tp* const crend() const noexcept {
+    _Tp* crend() const noexcept {
         return nullptr;
     }
 };
