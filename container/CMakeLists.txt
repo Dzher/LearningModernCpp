@@ -4,6 +4,7 @@ set(myarray
 )
 
 add_library(myarray ${myarray})
+set_source_files_properties(myarray.h PROPERTIES LANGUAGE CXX)
 
 #========================================================================= 
 set(myoptional
@@ -11,3 +12,4 @@ set(myoptional
 )
 
 add_library(myoptional ${myoptional})
+set_source_files_properties(myoptional.h PROPERTIES LANGUAGE CXX)
