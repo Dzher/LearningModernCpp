@@ -27,3 +27,10 @@ set(csp_customer_productor
 add_executable(csp_customer_productor ${csp_customer_productor})
 set_source_files_properties(csp_customer_productor.h PROPERTIES LANGUAGE CXX)
 #===============================================================================
+set(spin_lock
+    spin_lock.h
+)
+
+add_executable(spin_lock ${spin_lock})
+set_source_files_properties(spin_lock.h PROPERTIES LANGUAGE CXX)
+#===============================================================================
