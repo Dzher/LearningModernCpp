@@ -34,3 +34,10 @@ set(spin_lock
 add_executable(spin_lock ${spin_lock})
 set_source_files_properties(spin_lock.h PROPERTIES LANGUAGE CXX)
 #===============================================================================
+set(6_memory_orders
+    6_memory_orders.h
+)
+
+add_executable(6_memory_orders ${6_memory_orders})
+set_source_files_properties(6_memory_orders.h PROPERTIES LANGUAGE CXX)
+#===============================================================================
