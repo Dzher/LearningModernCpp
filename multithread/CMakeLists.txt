@@ -41,3 +41,10 @@ set(6_memory_orders
 add_executable(6_memory_orders ${6_memory_orders})
 set_source_files_properties(6_memory_orders.h PROPERTIES LANGUAGE CXX)
 #===============================================================================
+set(thread_safe_singleton
+    thread_safe_singleton.h
+)
+
+add_executable(thread_safe_singleton ${thread_safe_singleton})
+set_source_files_properties(thread_safe_singleton.h PROPERTIES LANGUAGE CXX)
+#===============================================================================
