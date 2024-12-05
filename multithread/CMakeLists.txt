@@ -48,3 +48,10 @@ set(thread_safe_singleton
 add_executable(thread_safe_singleton ${thread_safe_singleton})
 set_source_files_properties(thread_safe_singleton.h PROPERTIES LANGUAGE CXX)
 #===============================================================================
+set(sequential_consistent
+    sequential_consistent.h
+)
+
+add_executable(sequential_consistent ${sequential_consistent})
+set_source_files_properties(sequential_consistent.h PROPERTIES LANGUAGE CXX)
+#===============================================================================
