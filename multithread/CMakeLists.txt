@@ -55,3 +55,10 @@ set(sequential_consistent
 add_executable(sequential_consistent ${sequential_consistent})
 set_source_files_properties(sequential_consistent.h PROPERTIES LANGUAGE CXX)
 #===============================================================================
+set(acquire_release
+    acquire_release.h
+)
+
+add_executable(acquire_release ${acquire_release})
+set_source_files_properties(acquire_release.h PROPERTIES LANGUAGE CXX)
+#===============================================================================
