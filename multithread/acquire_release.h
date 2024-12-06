@@ -3,7 +3,7 @@
 #include <iostream>
 #include <thread>
 
-void implyRiskMethod() {
+void implyRiskMethod1() {
     std::atomic<int> result = 0;
 
     std::atomic<bool> x{false}, y{false};
@@ -34,12 +34,80 @@ void implyRiskMethod() {
     write_y.join();
     read_y_then_x.join();
 
-    assert(result != 0);  // maybe assert
+    assert(result != 0);  // maybe assert?
     std::cout << "result value is: " << result << std::endl;
 }
 
-int main() {
-    implyRiskMethod();
+void implyRiskMethod2(std::memory_order order = std::memory_order_seq_cst) {
+    std::atomic_int x{0};
+    std::atomic_int y{0};
 
+    std::thread t1(
+        [&]
+        {
+            y.store(20, order);  //1
+            x.store(10, order);  //2
+        });
+    std::thread t2(
+        [&]
+        {
+            if (x.load(order) == 10) {        //3
+                assert(y.load(order) == 20);  //4
+                y.store(10, order);           //5
+            }
+        });
+    std::thread t3(
+        [&]
+        {
+            if (y.load(order) == 10) {        //6
+                assert(x.load(order) == 10);  //7
+            }
+        });
+
+    t1.join();
+    t2.join();
+    t3.join();
+
+    std::string memory_order = order == std::memory_order_seq_cst ? "seq_cst" : "relax";
+    std::cout << "Run success with order: " << memory_order << std::endl;
+}
+
+void lookLikeDangerButSafe() {
+    std::atomic_int x{0};
+    std::atomic_int x1, x2;
+
+    std::thread thread_set(
+        [&]
+        {
+            x.store(1, std::memory_order_relaxed);
+            x.store(2, std::memory_order_relaxed);
+        });
+    std::thread thread_get(
+        [&]
+        {
+            x1 = x.load(std::memory_order_relaxed);
+            x2 = x.load(std::memory_order_relaxed);
+            assert(x1 <= x2);
+        });
+
+    thread_set.join();
+    thread_get.join();
+
+    std::cout << "x1: " << x1 << std::endl;
+    std::cout << "x2: " << x2 << std::endl;
+    std::cout << std::endl;
+}
+
+int main() {
+    // implyRiskMethod1();
+
+    // implyRiskMethod2();
+
+    // assert failed at 4: 2->3->4->assert or 2->3->5->4->assert
+    // assert failed at 7: I dont know how it happen?
+    // AI Say: t2 set y=10, but in t3 only async y no async x, so in t3 x still is 0
+    // implyRiskMethod2(std::memory_order_relaxed);
+
+    lookLikeDangerButSafe();
     return 0;
 }
