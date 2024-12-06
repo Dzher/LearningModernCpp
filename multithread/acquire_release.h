@@ -98,6 +98,32 @@ void lookLikeDangerButSafe() {
     std::cout << std::endl;
 }
 
+void ProductorCustomer() {
+    std::atomic_bool blocker{false};
+    std::string str;
+    int value = 0;
+
+    std::thread productor(
+        [&]
+        {
+            str = "hello";
+            value = 10;
+            blocker.store(true, std::memory_order_release);  //guarantee the above process before this line
+        });
+    std::thread customer(
+        [&]
+        {
+            blocker.load(std::memory_order_acquire);  //guarantee the below process after this line
+            assert(str == "hello");
+            assert(value == 10);
+        });
+
+    productor.join();
+    customer.join();
+
+    std::cout << "Successful" << std::endl;
+}
+
 int main() {
     // implyRiskMethod1();
 
@@ -109,5 +135,7 @@ int main() {
     // implyRiskMethod2(std::memory_order_relaxed);
 
     lookLikeDangerButSafe();
+    // ProductorCustomer();
+    
     return 0;
 }
