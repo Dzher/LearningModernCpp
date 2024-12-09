@@ -121,7 +121,32 @@ void ProductorCustomer() {
     productor.join();
     customer.join();
 
-    std::cout << "Successful" << std::endl;
+    std::cout << "Run ProductorCustomer Successful" << std::endl;
+}
+
+void threadFence() {
+    std::string str;
+    int value = 0;
+
+    std::thread productor(
+        [&]
+        {
+            str = "hello";
+            value = 10;
+            std::atomic_thread_fence(std::memory_order_release);  //guarantee the above process before this line
+        });
+    std::thread customer(
+        [&]
+        {
+            std::atomic_thread_fence(std::memory_order_acquire);  //guarantee the below process after this line
+            assert(str == "hello");
+            assert(value == 10);
+        });
+
+    productor.join();
+    customer.join();
+
+    std::cout << "Run threadFence Successful" << std::endl;
 }
 
 int main() {
@@ -136,6 +161,7 @@ int main() {
 
     lookLikeDangerButSafe();
     // ProductorCustomer();
-    
+    // threadFence();
+
     return 0;
 }
