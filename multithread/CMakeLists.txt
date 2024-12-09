@@ -62,3 +62,10 @@ set(acquire_release
 add_executable(acquire_release ${acquire_release})
 set_source_files_properties(acquire_release.h PROPERTIES LANGUAGE CXX)
 #===============================================================================
+set(thread_safe_stack
+    thread_safe_stack.h
+)
+
+add_executable(thread_safe_stack ${thread_safe_stack})
+set_source_files_properties(thread_safe_stack.h PROPERTIES LANGUAGE CXX)
+#===============================================================================
