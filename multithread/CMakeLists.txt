@@ -69,3 +69,10 @@ set(thread_safe_stack
 add_executable(thread_safe_stack ${thread_safe_stack})
 set_source_files_properties(thread_safe_stack.h PROPERTIES LANGUAGE CXX)
 #===============================================================================
+set(test_semaphore
+    test_semaphore.h
+)
+
+add_executable(test_semaphore ${test_semaphore})
+set_source_files_properties(test_semaphore.h PROPERTIES LANGUAGE CXX)
+#===============================================================================

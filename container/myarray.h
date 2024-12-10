@@ -27,7 +27,6 @@ struct myArray
     _Tp& at(size_t __n) {
         if (__n >= _N) [[unlikely]] {
             throw std::runtime_error("out of range: index = " + std::to_string(__n));
-            return;
         }
         return _M_element[__n];
     }
@@ -35,7 +34,6 @@ struct myArray
     _Tp const& at(size_t __n) const {
         if (__n >= _N) [[unlikely]] {
             throw std::runtime_error("out of range: index = " + std::to_string(__n));
-            return;
         }
         return _M_element[__n];
     }
