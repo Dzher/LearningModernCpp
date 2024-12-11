@@ -13,8 +13,8 @@
 
 using namespace std::literals;
 
-unsigned random() {
-    static std::uniform_int_distribution<unsigned> distribution{2U, 9U};  // [delays]
+unsigned int random() {
+    static std::uniform_int_distribution<unsigned int> distribution{2U, 9U};  // [delays]
     static std::random_device engine;
     static std::mt19937 noise{engine()};
     return distribution(noise);
@@ -25,44 +25,44 @@ class alignas(64) Guide
 {
 public:
     static void initStartTime() {
-        started_time = std::chrono::high_resolution_clock::now();
+        started_time_ = std::chrono::high_resolution_clock::now();
     }
 
-    void initial_delay() const {
-        std::this_thread::sleep_for(delay * kTimeTick);
+    void initDelay() const {
+        std::this_thread::sleep_for(delay_ * kTimeTick);
     }
 
-    void occupy_sema() {
-        wait_on_sema =
-            static_cast<unsigned>(std::chrono::duration_cast<std::chrono::milliseconds>(
-                                      std::chrono::high_resolution_clock::now() - started_time - delay * kTimeTick)
-                                      .count() /
-                                  kTimeTick.count());
-        std::this_thread::sleep_for(occupy * kTimeTick);
+    void occupySema() {
+        wait_on_sema_ = static_cast<unsigned int>(
+            std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() -
+                                                                  started_time_ - delay_ * kTimeTick)
+                .count() /
+            kTimeTick.count());
+        std::this_thread::sleep_for(occupy_ * kTimeTick);
     }
 
-    void visualize(unsigned id) const {
-        auto kPrintNStr = [=](auto str, const unsigned n)
+    void visualize(unsigned int id) const {
+        auto kPrintNStr = [=](auto str, const unsigned int n)
         {
-            for (unsigned count = n; count > 0; count--) {
+            for (unsigned int count = n; count > 0; count--) {
                 std::cout << str;
             }
         };
-        std::lock_guard lk{cout_mutex};
+        std::lock_guard lk{cout_mtx_};
         std::cout << '#' << std::setw(2) << id << ' ';
-        kPrintNStr("░", delay);
-        kPrintNStr("▒", wait_on_sema);
-        kPrintNStr("█", occupy);
+        kPrintNStr("░", delay_);
+        kPrintNStr("▒", wait_on_sema_);
+        kPrintNStr("█", occupy_);
         std::cout << '\n';
     }
 
 private:
-    inline static std::mutex cout_mutex;
-    inline static std::chrono::time_point<std::chrono::high_resolution_clock> started_time;
-    unsigned delay{random()};
-    unsigned occupy{random()};
-    unsigned wait_on_sema{};
-    static constexpr auto kTimeTick{10ms};
+    inline static std::mutex cout_mtx_;
+    inline static std::chrono::time_point<std::chrono::high_resolution_clock> started_time_;
+    unsigned int delay_{random()};
+    unsigned int occupy_{random()};
+    unsigned int wait_on_sema_{};
+    static constexpr auto kTimeTick{100ms};
 };
 
 constexpr std::size_t kMaxThreadsCount{10U};  // change and see the effect
@@ -71,10 +71,10 @@ std::counting_semaphore semaphore{kMaxSemaCount};
 
 std::array<Guide, kMaxThreadsCount> guides;
 
-void workerThread(unsigned id) {
-    guides[id].initial_delay();  // emulate some work before sema acquisition
-    semaphore.acquire();         // wait until a free sema slot is available
-    guides[id].occupy_sema();    // emulate some work while sema is acquired
+void workerThread(unsigned int id) {
+    guides[id].initDelay();   // emulate some work before sema acquisition
+    semaphore.acquire();      // wait until a free sema slot is available
+    guides[id].occupySema();  // emulate some work while sema is acquired
     semaphore.release();
     guides[id].visualize(id);
 }
