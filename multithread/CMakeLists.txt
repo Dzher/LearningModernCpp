@@ -83,3 +83,10 @@ set(memory_fence
 add_executable(memory_fence ${memory_fence})
 set_source_files_properties(memory_fence.h PROPERTIES LANGUAGE CXX)
 #===============================================================================
+set(thread_safe_queue
+    thread_safe_queue.h
+)
+
+add_executable(thread_safe_queue ${thread_safe_queue})
+set_source_files_properties(thread_safe_queue.h PROPERTIES LANGUAGE CXX)
+#===============================================================================

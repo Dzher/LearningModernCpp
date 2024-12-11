@@ -6,7 +6,7 @@
 #include <stack>
 #include <thread>
 
-struct empty_stack : std::exception
+struct empty_stack_error : std::exception
 {
     [[nodiscard]] const char* what() const noexcept override {
         return "Error: Stack is Empty!!!";
@@ -34,7 +34,7 @@ public:
     T pop() {
         std::lock_guard<std::mutex> lock(mtx_);
         if (data_.empty()) {
-            throw empty_stack();
+            throw empty_stack_error();
         }
         auto value = std::move(data_.top());
         data_.pop();
