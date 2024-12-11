@@ -76,3 +76,10 @@ set(test_semaphore
 add_executable(test_semaphore ${test_semaphore})
 set_source_files_properties(test_semaphore.h PROPERTIES LANGUAGE CXX)
 #===============================================================================
+set(memory_fence
+    memory_fence.h
+)
+
+add_executable(memory_fence ${memory_fence})
+set_source_files_properties(memory_fence.h PROPERTIES LANGUAGE CXX)
+#===============================================================================
