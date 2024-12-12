@@ -90,3 +90,10 @@ set(thread_safe_queue
 add_executable(thread_safe_queue ${thread_safe_queue})
 set_source_files_properties(thread_safe_queue.h PROPERTIES LANGUAGE CXX)
 #===============================================================================
+set(lock_free_stack
+    lock_free_stack.h
+)
+
+add_executable(lock_free_stack ${lock_free_stack})
+set_source_files_properties(lock_free_stack.h PROPERTIES LANGUAGE CXX)
+#===============================================================================
