@@ -104,3 +104,10 @@ set(interruptible_thread
 add_executable(interruptible_thread ${interruptible_thread})
 set_source_files_properties(interruptible_thread.h PROPERTIES LANGUAGE CXX)
 #===============================================================================
+set(join_threads
+    join_threads.h
+)
+
+add_executable(join_threads ${join_threads})
+set_source_files_properties(join_threads.h PROPERTIES LANGUAGE CXX)
+#===============================================================================
