@@ -97,3 +97,10 @@ set(lock_free_stack
 add_executable(lock_free_stack ${lock_free_stack})
 set_source_files_properties(lock_free_stack.h PROPERTIES LANGUAGE CXX)
 #===============================================================================
+set(interruptible_thread
+    interruptible_thread.h
+)
+
+add_executable(interruptible_thread ${interruptible_thread})
+set_source_files_properties(interruptible_thread.h PROPERTIES LANGUAGE CXX)
+#===============================================================================
