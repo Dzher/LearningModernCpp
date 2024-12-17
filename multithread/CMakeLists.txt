@@ -111,3 +111,10 @@ set(join_threads
 add_executable(join_threads ${join_threads})
 set_source_files_properties(join_threads.h PROPERTIES LANGUAGE CXX)
 #===============================================================================
+set(parallel_traversal
+    parallel_traversal.h
+)
+
+add_executable(parallel_traversal ${parallel_traversal})
+set_source_files_properties(parallel_traversal.h PROPERTIES LANGUAGE CXX)
+#===============================================================================

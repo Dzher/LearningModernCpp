@@ -22,6 +22,10 @@ public:
         join_thread_list_.push_back(std::move(thread));
     }
 
+    std::thread& operator[](const unsigned int index) {
+        return join_thread_list_[index];
+    }
+
 private:
     std::vector<std::thread> join_thread_list_;
 };
