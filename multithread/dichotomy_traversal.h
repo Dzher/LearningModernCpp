@@ -8,7 +8,7 @@ static constexpr int kMinPerThreadCount = 25;  // must set a suitable value or t
 template <typename Iterator, typename Func>
 void dichotomy_traversal(Iterator first, Iterator last, Func func) {
     unsigned long need_thread_num = std::distance(first, last);
-    if (need_thread_num == 0) {
+    if (first >= last) {
         return;
     }
 
@@ -24,11 +24,11 @@ void dichotomy_traversal(Iterator first, Iterator last, Func func) {
 }
 
 int main() {
-    int task_num = 5000; // this implement cannot calculate too large number, just a demo
+    int task_num = 50000;  // this implement cannot calculate too large number, so just a demo
     std::vector<int> funcs(task_num, 1);
 
-    static long value = 0;
-    const auto sumValue = [](int each_value)
+    std::atomic_int value = 0;
+    const auto sumValue = [&value](int each_value)
     {
         value += each_value;
     };

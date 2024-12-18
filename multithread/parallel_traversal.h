@@ -8,7 +8,7 @@
 // if the task num <= kMinPerThreadCount, just run all tasks in main thread
 // if the task num > kMinPerThreadCount, then distribute the tasks euqally to main and sub threads
 
-static constexpr int kMinPerThreadCount = 25; // must set a suitable value or the efficiency will be bad
+static constexpr int kMinPerThreadCount = 25;  // must set a suitable value or the efficiency will be bad
 static const unsigned long kHardwareThreadCount = std::thread::hardware_concurrency();
 
 template <typename Iterator, typename Func>
@@ -29,22 +29,23 @@ void paraller_traversal(Iterator first, Iterator last, Func func) {
         Iterator thread_end_itor = thread_start_itor;
         std::advance(thread_end_itor, each_thread_task_num);
 
-        std::packaged_task<void(void)> task{[=]()
-                                            {
-                                                std::for_each(thread_start_itor, thread_end_itor, func);
-                                            }};
-        futures[i] = task.get_future();
-        std::thread t{std::move(task)};
-        t.join();
-
+        // std::packaged_task<void(void)> task{[=]()
+        //                                     {
+        //                                         std::for_each(thread_start_itor, thread_end_itor, func);
+        //                                     }};
+        // futures[i] = task.get_future();
+        // std::thread t{std::move(task)};
+        // t.join();
+        futures[i] = std::async([=]() { std::for_each(thread_start_itor, thread_end_itor, func); });
+        futures[i].get();
         thread_start_itor = thread_end_itor;
     }
     // main thread
     std::for_each(thread_start_itor, last, func);
 
-    for (auto i = 0; i < no_main_thread_num; ++i) {
-        futures[i].get();
-    }
+    // for (auto i = 0; i < no_main_thread_num; ++i) {
+    //     futures[i].get();
+    // }
 }
 
 int main() {
