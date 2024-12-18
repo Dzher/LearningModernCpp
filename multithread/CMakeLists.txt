@@ -125,3 +125,10 @@ set(dichotomy_traversal
 add_executable(dichotomy_traversal ${dichotomy_traversal})
 set_source_files_properties(dichotomy_traversal.h PROPERTIES LANGUAGE CXX)
 #===============================================================================
+set(paraller_find
+paraller_find.h
+)
+
+add_executable(paraller_find ${paraller_find})
+set_source_files_properties(paraller_find.h PROPERTIES LANGUAGE CXX)
+#===============================================================================
