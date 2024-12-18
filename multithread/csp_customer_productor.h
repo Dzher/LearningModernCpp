@@ -36,9 +36,9 @@ public:
 
     bool receive(T& value) {
         std::unique_lock<std::mutex> lock(mtx_);
-        cv_customer_.wait(lock, [this]() { return !queue_.empty() || closed_; });
+        cv_customer_.wait(lock, [this]() { return !queue_.empty() /*|| closed_*/; });
 
-        if (closed_) {
+        if (queue_.empty() && closed_) {
             return false;
         }
 
@@ -49,8 +49,13 @@ public:
         return true;
     }
 
+    bool received_all_message() {
+        std::lock_guard<std::mutex> lock(mtx_);
+        return queue_.empty() && closed_;
+    }
+
     void close() {
-        std::unique_lock<std::mutex> lock(mtx_);
+        std::lock_guard<std::mutex> lock(mtx_);
 
         closed_ = true;
         cv_productor_.notify_all();
@@ -94,6 +99,9 @@ int main() {
             while (channel.receive(value)) {
                 std::cout << "receive message: " << value << std::endl;
                 std::this_thread::sleep_for(std::chrono::seconds(custom_cost_time));
+                if (channel.received_all_message()) {
+                    break;
+                }
             }
         });
 
