@@ -118,3 +118,10 @@ set(parallel_traversal
 add_executable(parallel_traversal ${parallel_traversal})
 set_source_files_properties(parallel_traversal.h PROPERTIES LANGUAGE CXX)
 #===============================================================================
+set(dichotomy_traversal
+    dichotomy_traversal.h
+)
+
+add_executable(dichotomy_traversal ${dichotomy_traversal})
+set_source_files_properties(dichotomy_traversal.h PROPERTIES LANGUAGE CXX)
+#===============================================================================
