@@ -1,4 +1,6 @@
 #include <iostream>
+// #include <syncstream>
+#include <sstream>
 #include <thread>
 #include <utility>
 #include <vector>
@@ -31,7 +33,11 @@ private:
 };
 
 void printValue(int value) {
-    std::cout << "Thread " << std::this_thread::get_id() << " value is: " << value << std::endl;
+    // std::osyncstream sync_cout(std::cout);
+    // sync_cout << "Thread " << std::this_thread::get_id() << " value is: " << value << std::endl;
+    std::ostringstream data;
+    data << "Thread " << std::this_thread::get_id() << " value is: " << value << std::endl;
+    std::cout << data.str();
 }
 
 int main() {

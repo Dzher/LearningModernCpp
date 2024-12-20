@@ -3,6 +3,7 @@
 #include <iostream>
 #include <iterator>
 #include <thread>
+#include <vector>
 
 // Design Idea:
 // if the task num <= kMinPerThreadCount, just run all tasks in main thread

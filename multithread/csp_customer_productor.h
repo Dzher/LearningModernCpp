@@ -6,7 +6,9 @@
 #include <iostream>
 #include <mutex>
 #include <queue>
+#include <sstream>
 #include <string>
+// #include <syncstream>
 #include <thread>
 
 template <typename T>
@@ -84,7 +86,9 @@ int main() {
             int index = 1;
             while (index <= 10) {
                 std::this_thread::sleep_for(std::chrono::seconds(product_cost_time));
-                std::cout << "send message: " << index << std::endl;
+                std::ostringstream data;
+                data << "send message: " << index << std::endl;
+                std::cout << data.str();
                 std::string value = "the " + std::to_string(index) + " message";
                 channel.send(value);
                 ++index;
@@ -97,7 +101,9 @@ int main() {
         {
             std::string value;
             while (channel.receive(value)) {
-                std::cout << "receive message: " << value << std::endl;
+                std::ostringstream data;
+                data << "receive message: " << value << std::endl;
+                std::cout << data.str();
                 std::this_thread::sleep_for(std::chrono::seconds(custom_cost_time));
                 if (channel.received_all_message()) {
                     break;

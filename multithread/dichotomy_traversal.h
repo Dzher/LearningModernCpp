@@ -2,6 +2,7 @@
 #include <future>
 #include <iostream>
 #include <iterator>
+#include <vector>
 
 static constexpr int kMinPerThreadCount = 25;  // must set a suitable value or the efficiency will be bad
 

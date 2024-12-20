@@ -4,6 +4,7 @@
 #include <iostream>
 #include <iterator>
 #include <thread>
+#include <vector>
 
 static constexpr int kMinPerThreadCount = 25;  // must set a suitable value or the efficiency will be bad
 static const unsigned long kHardwareThreadCount = std::thread::hardware_concurrency();
