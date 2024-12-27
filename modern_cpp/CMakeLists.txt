@@ -13,3 +13,10 @@ set(functional_programming
 add_executable(functional_programming ${functional_programming})
 set_source_files_properties(functional_programming.h PROPERTIES LANGUAGE CXX)
 #===============================================================================
+set(std_bind
+    std_bind.h
+)
+
+add_executable(std_bind ${std_bind})
+set_source_files_properties(std_bind.h PROPERTIES LANGUAGE CXX)
+#===============================================================================
