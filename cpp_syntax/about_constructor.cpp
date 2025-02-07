@@ -77,6 +77,19 @@ public:
         delete a_ptr_;
     }
 
+    // if need rvalue copy&assign construntor
+    BDeepCopy(BDeepCopy&& other) noexcept : a_ptr_(other.a_ptr_) {
+        other.a_ptr_ = nullptr;
+    }
+    BDeepCopy& operator=(BDeepCopy&& other) noexcept {
+        if (this != &other) {
+            delete a_ptr_;
+            a_ptr_ = other.a_ptr_;
+            other.a_ptr_ = nullptr;
+        }
+        return *this;
+    }
+
 public:
     A* a_ptr_ = nullptr;
 };
@@ -86,6 +99,15 @@ int main() {
 
     A a;
     a.data_ = "Proto A";
-    BShallowCopy B_s(&a);
+    std::cout << "address of a: " << &a << std::endl;
+    BShallowCopy b_s(&a);
+    std::cout << "address of a ptr in b_s: " << b_s.a_ptr_ << std::endl;
+    BShallowCopy b_s_c(b_s);
+    std::cout << "address of a ptr in b_s_c: " << b_s_c.a_ptr_ << std::endl;
+    BDeepCopy b_d(&a);
+    std::cout << "address of a ptr in b_d: " << b_d.a_ptr_ << std::endl;
+    BDeepCopy b_d_c(b_d);
+    std::cout << "address of a ptr in b_d_c: " << b_d_c.a_ptr_ << std::endl;
+
     return 0;
 }
