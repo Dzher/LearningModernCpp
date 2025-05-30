@@ -8,16 +8,13 @@
 #include "asio/read.hpp"
 #include "asio/write.hpp"
 
-int main(int argc, const char* argv[])
-{
+int main(int argc, const char* argv[]) {
     const int max_length = 1024;
-    if (argc != 3)
-    {
+    if (argc != 3) {
         std::cerr << "Error: client.exe <host> <port>" << std::endl;
     }
 
-    try
-    {
+    try {
         asio::io_context io_context;
         asio::ip::tcp::resolver resolver{io_context};
         asio::ip::tcp::socket socket{io_context};
@@ -39,8 +36,7 @@ int main(int argc, const char* argv[])
         std::cout.write(receive_message, receive_len);
         std::cout << std::endl;
     }
-    catch (std::exception& e)
-    {
+    catch (std::exception& e) {
         std::cerr << "Exception: " << e.what() << "\n";
     }
 

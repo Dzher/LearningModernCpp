@@ -6,16 +6,13 @@
 
 const int max_length = 1024;
 
-int main(int argc, const char* argv[])
-{
-    if (argc != 3)
-    {
+int main(int argc, const char* argv[]) {
+    if (argc != 3) {
         std::cerr << "Error: client <host> <port>" << std::endl;
         return 1;
     }
 
-    try
-    {
+    try {
         asio::io_context io_context;
         asio::ip::udp::resolver resolver{io_context};
         auto endpoint = resolver.resolve(asio::ip::udp::v4(), argv[1], argv[2])->endpoint();
@@ -35,8 +32,7 @@ int main(int argc, const char* argv[])
         std::cout.write(reveive_message, receive_length);
         std::cout << std::endl;
     }
-    catch (std::exception& e)
-    {
+    catch (std::exception& e) {
         std::cerr << "Exception: " << e.what() << std::endl;
     }
 

@@ -6,16 +6,13 @@
 #include "asio/placeholders.hpp"
 #include "asio/steady_timer.hpp"
 
-void printWithParams(const std::error_code&, asio::steady_timer* timer, int& count)
-{
-    if (count < 5)
-    {
+void printWithParams(const std::error_code&, asio::steady_timer* timer, int& count) {
+    if (count < 5) {
         std::cout << "Count is " << count++ << std::endl;
         timer->expires_at(timer->expiry() + asio::chrono::seconds(1));
         timer->async_wait(std::bind(printWithParams, asio::placeholders::error, timer, count));
     }
-    else
-    {
+    else {
         std::cout << "Method 2 Finished" << std::endl;
         std::cout << std::endl;
     }
@@ -24,20 +21,16 @@ void printWithParams(const std::error_code&, asio::steady_timer* timer, int& cou
 class Printer
 {
 public:
-    explicit Printer(asio::io_context& io) : timer_(io, asio::chrono::seconds(1)), count_(0)
-    {
+    explicit Printer(asio::io_context& io) : timer_(io, asio::chrono::seconds(1)), count_(0) {
         timer_.async_wait(std::bind(&Printer::print, this));
     }
-    ~Printer()
-    {
+    ~Printer() {
         std::cout << "Method 3 Finished" << std::endl;
         std::cout << std::endl;
     }
 
-    void print()
-    {
-        if (count_ < 5)
-        {
+    void print() {
+        if (count_ < 5) {
             std::cout << "Count is " << count_++ << std::endl;
             timer_.expires_at(timer_.expiry() + asio::chrono::seconds(1));
             timer_.async_wait(std::bind(&Printer::print, this));
@@ -49,8 +42,7 @@ private:
     int count_;
 };
 
-int main()
-{
+int main() {
     // method 1
     asio::io_context io;
     asio::steady_timer t{io, asio::chrono::seconds{5}};

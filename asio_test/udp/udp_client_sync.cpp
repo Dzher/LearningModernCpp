@@ -4,16 +4,13 @@
 #include "asio/io_context.hpp"
 #include "asio/ip/udp.hpp"
 
-int main(int argc, const char* argv[])
-{
-    if (argc != 2)
-    {
+int main(int argc, const char* argv[]) {
+    if (argc != 2) {
         std::cerr << "Error: Host Issue!" << std::endl;
         return 1;
     }
 
-    try
-    {
+    try {
         asio::io_context context;
 
         asio::ip::udp::resolver resolver{context};
@@ -31,8 +28,7 @@ int main(int argc, const char* argv[])
 
         std::cout.write(recv_buf.data(), len);
     }
-    catch (std::exception& e)
-    {
+    catch (std::exception& e) {
         std::cerr << e.what() << std::endl;
     }
 

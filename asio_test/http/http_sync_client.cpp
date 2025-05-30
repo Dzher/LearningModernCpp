@@ -10,17 +10,14 @@
 #include "asio/streambuf.hpp"
 #include "asio/write.hpp"
 
-int main(int argc, char* argv[])
-{
-    if (argc != 3)
-    {
+int main(int argc, char* argv[]) {
+    if (argc != 3) {
         std::cout << "Usage: sync_client <server> <path>" << std::endl;
         std::cout << "Example: http_sync_client www.boost.org /LICENSE_1_0.txt" << std::endl;
         return 1;
     }
 
-    try
-    {
+    try {
         asio::io_context io_context;
 
         asio::ip::tcp::resolver resolver(io_context);
@@ -49,13 +46,11 @@ int main(int argc, char* argv[])
         response_stream >> status_code;
         std::string status_message;
         std::getline(response_stream, status_message);
-        if (!response_stream || http_version.substr(0, 5) != "HTTP/")
-        {
+        if (!response_stream || http_version.substr(0, 5) != "HTTP/") {
             std::cout << "Invalid response\n";
             return 1;
         }
-        if (status_code != 200)
-        {
+        if (status_code != 200) {
             std::cout << "Response returned with status code " << status_code << "\n";
             return 1;
         }
@@ -64,30 +59,25 @@ int main(int argc, char* argv[])
 
         // Process the response headers.
         std::string header;
-        while (std::getline(response_stream, header) && header != "\r")
-        {
+        while (std::getline(response_stream, header) && header != "\r") {
             std::cout << header << "\n";
         }
         std::cout << "\n";
 
         // Write whatever content we already have to output.
-        if (response.size() > 0)
-        {
+        if (response.size() > 0) {
             std::cout << &response;
         }
         // Read until EOF, writing data to output as we go.
         std::error_code error;
-        while (asio::read(socket, response, asio::transfer_at_least(1), error))
-        {
+        while (asio::read(socket, response, asio::transfer_at_least(1), error)) {
             std::cout << &response;
         }
-        if (error != asio::error::eof)
-        {
+        if (error != asio::error::eof) {
             throw std::system_error(error);
         }
     }
-    catch (std::exception& e)
-    {
+    catch (std::exception& e) {
         std::cout << "Exception: " << e.what() << "\n";
     }
 

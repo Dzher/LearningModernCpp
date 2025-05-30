@@ -16,91 +16,75 @@ class ChatClient
 {
 public:
     ChatClient(asio::io_context& io_context, const asio::ip::tcp::resolver::results_type& endpoints)
-        : io_context_(io_context), socket_(io_context_)
-    {
+        : io_context_(io_context), socket_(io_context_) {
         connect(endpoints);
     }
 
-    void write(const ChatMessage& msg)
-    {
+    void write(const ChatMessage& msg) {
         asio::post(io_context_,
                    [this, msg]()
                    {
                        bool write_in_progress = !write_messages_.empty();
                        write_messages_.push_back(msg);
-                       if (!write_in_progress)
-                       {
+                       if (!write_in_progress) {
                            write();
                        }
                    });
     }
 
-    void close()
-    {
+    void close() {
         asio::post(io_context_, [this]() { socket_.close(); });
     }
 
 private:
-    void connect(const asio::ip::tcp::resolver::results_type& endpoints)
-    {
+    void connect(const asio::ip::tcp::resolver::results_type& endpoints) {
         asio::async_connect(socket_, endpoints,
                             [this](std::error_code error, asio::ip::tcp::endpoint)
                             {
-                                if (!error)
-                                {
+                                if (!error) {
                                     readHeader();
                                 }
                             });
     }
 
-    void readHeader()
-    {
+    void readHeader() {
         asio::async_read(socket_, asio::buffer(read_message_.data(), read_message_.headerLength()),
                          [this](std::error_code error, std::size_t)
                          {
-                             if (!error && read_message_.decodeHeader())
-                             {
+                             if (!error && read_message_.decodeHeader()) {
                                  readBody();
                              }
-                             else
-                             {
+                             else {
                                  socket_.close();
                              }
                          });
     }
 
-    void readBody()
-    {
+    void readBody() {
         asio::async_read(socket_, asio::buffer(read_message_.body(), read_message_.bodyLength()),
                          [this](std::error_code error, std::size_t)
                          {
-                             if (!error)
-                             {
+                             if (!error) {
                                  std::cout.write(read_message_.body(), read_message_.bodyLength()) << std::endl;
                                  readHeader();
                              }
-                             else
-                             {
+                             else {
                                  socket_.close();
                              }
                          });
     }
 
-    void write()
-    {
+    void write() {
         asio::async_write(socket_, asio::buffer(write_messages_.front().data(), write_messages_.front().dataLength()),
                           [this](std::error_code error, std::size_t)
                           {
-                              if (!error)
-                              {
+                              if (!error) {
                                   write_messages_.pop_front();
-                                  if (!write_messages_.empty())
-                                  {
+                                  if (!write_messages_.empty()) {
                                       write();
                                   }
                               }
-                              else
-                              {
+                              else {
                                   socket_.close();
                               }
                           });
@@ -113,16 +97,13 @@ private:
     ChatMsgQueue write_messages_;
 };
 
-int main(int argc, char* argv[])
-{
-    if (argc != 3)
-    {
+int main(int argc, char* argv[]) {
+    if (argc != 3) {
         std::cerr << "Usage: chat_client <host> <port>" << std::endl;
         return 1;
     }
 
-    try
-    {
+    try {
         asio::io_context io_context;
         asio::ip::tcp::resolver resolver(io_context);
         asio::ip::basic_resolver_results endpoints = resolver.resolve(argv[1], argv[2]);
@@ -130,8 +111,7 @@ int main(int argc, char* argv[])
 
         std::thread thread([&io_context]() { io_context.run(); });
         char line[ChatMessage::bodyMaxLength() + 1];
-        while (std::cin.getline(line, ChatMessage::bodyMaxLength() + 1))
-        {
+        while (std::cin.getline(line, ChatMessage::bodyMaxLength() + 1)) {
             ChatMessage msg;
             msg.updateBodyLength(std::strlen(line));
             std::memcpy(msg.body(), line, msg.bodyLength());
@@ -142,8 +122,7 @@ int main(int argc, char* argv[])
         client.close();
         thread.join();
     }
-    catch (std::exception& e)
-    {
+    catch (std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
     }
 

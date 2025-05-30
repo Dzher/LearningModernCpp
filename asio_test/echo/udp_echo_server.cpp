@@ -4,11 +4,9 @@
 
 const int max_length = 1024;
 
-void server(asio::io_context& io_context, unsigned short port)
-{
+void server(asio::io_context& io_context, unsigned short port) {
     asio::ip::udp::socket sock(io_context, asio::ip::udp::endpoint(asio::ip::udp::v4(), port));
-    for (;;)
-    {
+    for (;;) {
         char data[max_length];
         asio::ip::udp::endpoint sender_endpoint;
         size_t length = sock.receive_from(asio::buffer(data, max_length), sender_endpoint);
@@ -16,21 +14,17 @@ void server(asio::io_context& io_context, unsigned short port)
     }
 }
 
-int main(int argc, char* argv[])
-{
-    if (argc != 2)
-    {
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
         std::cerr << "Usage: blocking_udp_echo_server <port>" << std::endl;
         return 1;
     }
 
-    try
-    {
+    try {
         asio::io_context io_context;
         server(io_context, std::atoi(argv[1]));
     }
-    catch (std::exception& e)
-    {
+    catch (std::exception& e) {
         std::cerr << "Exception: " << e.what() << std::endl;
     }
 

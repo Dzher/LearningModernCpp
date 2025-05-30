@@ -9,60 +9,49 @@
 class ChatMessage
 {
 public:
-    explicit ChatMessage() : body_length_(0)
-    {
+    explicit ChatMessage() : body_length_(0) {
     }
 
-    char* data()
-    {
+    char* data() {
         return data_;
     }
 
-    unsigned int dataLength()
-    {
+    unsigned int dataLength() {
         return kHeaderLength + body_length_;
     }
 
-    static unsigned int headerLength()
-    {
+    static unsigned int headerLength() {
         return kHeaderLength;
     }
 
-    char* body()
-    {
+    char* body() {
         return data_ + kHeaderLength;
     }
 
-    unsigned int bodyLength()
-    {
+    unsigned int bodyLength() {
         return body_length_;
     }
 
-    static unsigned int bodyMaxLength()
-    {
+    static unsigned int bodyMaxLength() {
         return kMaxBodyLength;
     }
 
-    void updateBodyLength(unsigned int length)
-    {
+    void updateBodyLength(unsigned int length) {
         body_length_ = length <= kMaxBodyLength ? length : kMaxBodyLength;
     }
 
-    bool decodeHeader()
-    {
+    bool decodeHeader() {
         char header[kHeaderLength + 1] = "";
         std::strncat(header, data_, kHeaderLength);
         body_length_ = std::atoi(header);
-        if (body_length_ > kMaxBodyLength)
-        {
+        if (body_length_ > kMaxBodyLength) {
             body_length_ = 0;
             return false;
         }
         return true;
     }
 
-    void encodeHeader()
-    {
+    void encodeHeader() {
         char header[kHeaderLength + 1] = "";
         std::sprintf(header, "%4d", body_length_);
         std::memcpy(data_, header, kHeaderLength);
